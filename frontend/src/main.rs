@@ -9,16 +9,16 @@ async fn main() -> eframe::Result<()> {
 }
 
 struct App {
-    num1: String,
-    num2: String,
+    num1: f32,  // ✅ Change to f32 for slider
+    num2: f32,  // ✅ Change to f32 for slider
     result: Arc<Mutex<String>>,  // ✅ Store result inside Arc<Mutex<String>>
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
-            num1: "".to_owned(),
-            num2: "".to_owned(),
+            num1: 0.0,  // ✅ Initialize with default value
+            num2: 0.0,  // ✅ Initialize with default value
             result: Arc::new(Mutex::new("".to_owned())),  // ✅ Initialize Mutex
         }
     }
@@ -31,17 +31,17 @@ impl eframe::App for App {
 
             ui.horizontal(|ui| {
                 ui.label("Number 1:");
-                ui.text_edit_singleline(&mut self.num1);
+                ui.add(egui::Slider::new(&mut self.num1, 0.0..=100.0));  // ✅ Use Slider for num1
             });
 
             ui.horizontal(|ui| {
                 ui.label("Number 2:");
-                ui.text_edit_singleline(&mut self.num2);
+                ui.add(egui::Slider::new(&mut self.num2, 0.0..=100.0));  // ✅ Use Slider for num2
             });
 
             if ui.button("Calculate").clicked() {
-                let num1 = self.num1.clone();
-                let num2 = self.num2.clone();
+                let num1 = self.num1.to_string();  // ✅ Convert f32 to String for the request
+                let num2 = self.num2.to_string();  // ✅ Convert f32 to String for the request
                 let result_ref = Arc::clone(&self.result); // ✅ Clone Arc to use in async
 
                 let ctx = ctx.clone();
