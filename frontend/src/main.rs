@@ -1,5 +1,3 @@
-use eframe::egui;
-use reqwest;
 use serde_json::Value;
 use std::sync::{Arc, Mutex};
 
