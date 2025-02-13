@@ -63,39 +63,6 @@ fn main() -> Result<()> {
             );
             stream.write(response.as_bytes()).unwrap();
             stream.flush().unwrap();
-        } else if request.starts_with("GET /history") {
-            let mut stmt = conn.prepare("SELECT num1, num2, addition, subtraction, multiplication, division FROM calculations")?;
-            let calculations = stmt.query_map(params![], |row| {
-                Ok((
-                    row.get::<_, f64>(0)?,
-                    row.get::<_, f64>(1)?,
-                    row.get::<_, f64>(2)?,
-                    row.get::<_, f64>(3)?,
-                    row.get::<_, f64>(4)?,
-                    row.get::<_, String>(5)?,
-                ))
-            })?;
-
-            let mut history = Vec::new();
-            for calc in calculations {
-                let (num1, num2, add, sub, mul, div) = calc?;
-                history.push(format!(
-                    "{{ \"num1\": {}, \"num2\": {}, \"addition\": {}, \"subtraction\": {}, \"multiplication\": {}, \"division\": \"{}\" }}",
-                    num1, num2, add, sub, mul, div
-                ));
-            }
-
-            let response_body = format!("[{}]", history.join(","));
-            let response = format!(
-                "HTTP/1.1 200 OK\r\n\
-                Content-Type: application/json\r\n\
-                Access-Control-Allow-Origin: *\r\n\
-                \r\n\
-                {}",
-                response_body
-            );
-            stream.write(response.as_bytes()).unwrap();
-            stream.flush().unwrap();
         }
     }
     Ok(())
