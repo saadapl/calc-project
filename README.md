@@ -4,4 +4,4 @@
 
 ## Frontend
 
-- Write `python3 -m http.server 8000` in frontend directory to start frontend server.
+- Write `cargo run` in frontend directory to start frontend server.
