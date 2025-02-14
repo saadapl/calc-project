@@ -4,4 +4,4 @@
 
 ## Frontend
 
-- Write `cargo run` in frontend directory to run egui app.
+- Write `python3 -m http.server 8000` in frontend directory to start frontend server.
