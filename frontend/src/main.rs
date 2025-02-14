@@ -58,9 +58,23 @@ async fn index() -> Html<&'static str> {
                 }
                 .slider-container {
                     margin-bottom: 20px;
+                    position: relative;
                 }
                 .results {
                     margin-top: 20px;
+                }
+                input[type="range"] {
+                    width: 200px;
+                }
+                #num1 {
+                    width: 500px; /* Increase width */
+                    position: relative;
+                    top: 6.5px; /* Move down the y-axis */
+                }
+                #num2 {
+                    width: 500px; /* Increase width */
+                    position: relative;
+                    top: 6.5px; /* Move down the y-axis */
                 }
             </style>
         </head>
@@ -68,27 +82,26 @@ async fn index() -> Html<&'static str> {
             <h1>Calculator</h1>
             <div class="slider-container">
                 <label for="num1">Number 1:</label>
-                <input type="range" id="num1" name="num1" min="0" max="100" value="50" oninput="updateResults()">
-                <span id="num1-value">50</span>
+                <input type="range" id="num1" name="num1" min="0" max="1000" value="100">
+                <span id="num1-value">100</span> <!-- Updated to match slider default value -->
             </div>
             <div class="slider-container">
                 <label for="num2">Number 2:</label>
-                <input type="range" id="num2" name="num2" min="0" max="100" value="50" oninput="updateResults()">
-                <span id="num2-value">50</span>
+                <input type="range" id="num2" name="num2" min="0" max="1000" value="100">
+                <span id="num2-value">100</span> <!-- Updated to match slider default value -->
             </div>
             <div class="results">
                 <h2>Results</h2>
-                <p>Addition: <span id="addition">100</span></p>
+                <p>Addition: <span id="addition">200</span></p> <!-- Updated to match default calculation -->
                 <p>Subtraction: <span id="subtraction">0</span></p>
-                <p>Multiplication: <span id="multiplication">2500</span></p>
+                <p>Multiplication: <span id="multiplication">10000</span></p> <!-- Updated to match default calculation -->
                 <p>Division: <span id="division">1</span></p>
             </div>
             <script>
+                // Function to update results
                 async function updateResults() {
                     const num1 = document.getElementById('num1').value;
                     const num2 = document.getElementById('num2').value;
-                    document.getElementById('num1-value').textContent = num1;
-                    document.getElementById('num2-value').textContent = num2;
 
                     const response = await fetch(`/calculate?num1=${num1}&num2=${num2}`);
                     const data = await response.json();
@@ -99,8 +112,33 @@ async fn index() -> Html<&'static str> {
                     document.getElementById('division').textContent = data.division;
                 }
 
+                // Function to update displayed slider values
+                function updateSliderValue(sliderId, valueId) {
+                    const slider = document.getElementById(sliderId);
+                    const value = document.getElementById(valueId);
+
+                    // Update displayed value as slider is moved
+                    slider.addEventListener('input', () => {
+                        value.textContent = slider.value;
+                    });
+
+                    // Update results when slider is released
+                    slider.addEventListener('change', updateResults);
+                }
+
+                // Initialize slider value updates
+                updateSliderValue('num1', 'num1-value');
+                updateSliderValue('num2', 'num2-value');
+
                 // Initialize results on page load
-                document.addEventListener('DOMContentLoaded', updateResults);
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Set initial values for sliders and displayed text
+                    document.getElementById('num1-value').textContent = document.getElementById('num1').value;
+                    document.getElementById('num2-value').textContent = document.getElementById('num2').value;
+
+                    // Update results with default values
+                    updateResults();
+                });
             </script>
         </body>
         </html>
