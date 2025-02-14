@@ -1,7 +1,15 @@
-## Backend
+# Usage
 
-- Write `cargo run` in backend directory to start backend server.
+- Open two terminals
 
-## Frontend
+- In first terminal, change directory to backend and run the following command:
 
-- Write `python3 -m http.server 8000` in frontend directory to start frontend server.
+```sh
+cargo run
+```
+
+- In second terminal, change directory to frontend and run the following command:
+
+```sh
+python3 -m http.server 8000
+```
